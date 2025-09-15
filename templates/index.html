@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chatbot Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Gemini Chatbot</h1>
+        <p>โปรเจกต์แชทบอทโดย (ใส่ชื่อของคุณ)</p>
+        <a href="/history" target="_blank">ดูประวัติการสนทนา</a>
+        <div class="chat-window" id="chat-window">
+            <div class="chat-message bot">สวัสดี! มีอะไรให้ช่วยไหมครับ</div>
+        </div>
+        <form id="chat-form" class="chat-input-form">
+            <input type="text" id="message-input" placeholder="พิมพ์ข้อความของคุณที่นี่..." autocomplete="off">
+            <button type="submit">ส่ง</button>
+        </form>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const chatWindow = document.getElementById('chat-window');
+
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const userMessage = messageInput.value.trim();
+            if (userMessage === '') return;
+
+            // Display user message
+            appendMessage('user', userMessage);
+            messageInput.value = '';
+
+            // Send message to server and get reply
+            const response = await fetch('/send_message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            });
+            const data = await response.json();
+
+            // Display bot reply
+            appendMessage('bot', data.reply);
+        });
+
+        function appendMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.innerHTML = message.replace(/\n/g, '<br>'); // ทำให้ขึ้นบรรทัดใหม่ได้
+            chatWindow.appendChild(messageElement);
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to bottom
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>ประวัติการสนทนา</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .history-container { padding: 20px; }
+        .timestamp { font-size: 0.8em; color: #888; }
+    </style>
+</head>
+<body>
+    <div class="container history-container">
+        <h1>ประวัติการสนทนาทั้งหมด</h1>
+        <a href="/">กลับไปหน้าแชท</a>
+        <hr>
+        <div class="chat-window">
+            {% for msg in messages %}
+                <div class="chat-message {{ msg.sender }}">
+                    <b>{{ 'คุณ' if msg.sender == 'user' else 'บอท' }}:</b>
+                    <p>{{ msg.message | safe }}</p>
+                    <span class="timestamp">{{ msg.timestamp }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
