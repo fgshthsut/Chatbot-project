@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.secret_key = 'my-super-secret-key-for-chatbot-project'
 
 # --- ตั้งค่า Gemini API ---
-GEMINI_API_KEY = os.environ.get('AIzaSyAd-cmI_O_RS1RKUFX8Luj2rGJoP9Bt24M') 
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') 
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-pro')
 
