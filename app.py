@@ -14,7 +14,7 @@ app.secret_key = 'my-super-secret-key-for-chatbot-project'
 # --- ตั้งค่า Gemini API ---
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-pro')
+model = genai.GenerativeModel('gemini-pro')
 
 # ---- [เปลี่ยนแปลง] ----
 # เราจะไม่ใช้ตัวแปร chat กลางแล้ว แต่จะใช้ dictionary เพื่อเก็บ session ของแต่ละคนแทน
@@ -26,12 +26,11 @@ DB_NAME = 'database.db'
 def init_db():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    # ---- [บังคับลบและสร้างใหม่] ----
-    cursor.execute("DROP TABLE IF EXISTS chat_history") # เพิ่มบรรทัดนี้
+    # ---- [เปลี่ยนแปลง] ---- เพิ่มคอลัมน์ session_id
     cursor.execute('''
-        CREATE TABLE chat_history (
+        CREATE TABLE IF NOT EXISTS chat_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            session_id TEXT NOT NULL,
+            session_id TEXT NOT NULL, 
             sender TEXT NOT NULL,
             message TEXT NOT NULL,
             timestamp DATETIME NOT NULL
