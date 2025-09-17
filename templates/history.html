@@ -7,6 +7,20 @@
     <style>
         .history-container { padding: 20px; }
         .timestamp { font-size: 0.8em; color: #888; }
+        .conversation-group {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            padding: 1rem;
+        }
+        .conversation-id {
+            font-size: 0.9em;
+            color: #555;
+            font-family: monospace;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -14,15 +28,25 @@
         <h1>ประวัติการสนทนาทั้งหมด</h1>
         <a href="/">กลับไปหน้าแชท</a>
         <hr>
-        <div class="chat-window">
-            {% for msg in messages %}
-                <div class="chat-message {{ msg.sender }}">
-                    <b>{{ 'คุณ' if msg.sender == 'user' else 'บอท' }}:</b>
-                    <p>{{ msg.message | safe }}</p>
-                    <span class="timestamp">{{ msg.timestamp }}</span>
+
+        {% for session_id, messages in conversations.items() %}
+            <div class="conversation-group">
+                <div class="conversation-id">
+                    <strong>ID การสนทนา:</strong> {{ session_id }}
                 </div>
-            {% endfor %}
-        </div>
+                <div class="chat-window" style="border: none; padding: 0;">
+                    {% for msg in messages %}
+                        <div class="chat-message {{ msg.sender }}">
+                            <b>{{ 'คุณ' if msg.sender == 'user' else 'บอท' }}:</b>
+                            <p>{{ msg.message | safe }}</p>
+                            <span class="timestamp">{{ msg.timestamp }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <p>ยังไม่มีประวัติการสนทนา</p>
+        {% endfor %}
     </div>
 </body>
 </html>
