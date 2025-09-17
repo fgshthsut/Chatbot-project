@@ -26,11 +26,12 @@ DB_NAME = 'database.db'
 def init_db():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    # ---- [เปลี่ยนแปลง] ---- เพิ่มคอลัมน์ session_id
+    # ---- [บังคับลบและสร้างใหม่] ----
+    cursor.execute("DROP TABLE IF EXISTS chat_history") # เพิ่มบรรทัดนี้
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS chat_history (
+        CREATE TABLE chat_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            session_id TEXT NOT NULL, 
+            session_id TEXT NOT NULL,
             sender TEXT NOT NULL,
             message TEXT NOT NULL,
             timestamp DATETIME NOT NULL
