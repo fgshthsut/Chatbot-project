@@ -12,7 +12,7 @@ app = Flask(__name__)
 # บรรทัดใหม่
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-flash')
+model = genai.GenerativeModel('gemini-2.5-pro')
 chat = model.start_chat(history=[]) # เริ่ม session การแชท
 
 # --- ตั้งค่าฐานข้อมูล (Database) ---
@@ -85,4 +85,5 @@ def history():
 
 if __name__ == '__main__':
     init_db() # สร้างไฟล์และตารางในฐานข้อมูลก่อนรัน
+
     app.run(debug=True) # debug=True สำหรับตอนพัฒนา, ตอนส่งครูเอาออกได้
